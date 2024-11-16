@@ -1,25 +1,33 @@
 import Image from "next/image";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <header>
-        <h1>
-          Crypt(ge)ography
-        </h1>
-      </header>
+    return (
+        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
+            <header className="mb-10">
+                <h1
+                    className="text-4xl font-bold text-center">Crypt(ge)ography
+                </h1>
 
-      <main>
-        <form>
-          <input/>
-          <input/>
-          <textarea></textarea>
-          <button> SUBMIT </button>
-        </form>
-      </main>
+            </header>
+
+            <main>
+                <div className="flex flex-col items-center">
+                    <label htmlFor="email" className="mb-2 text-sm">
+                        Recipient Email
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        className="w-80 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Recipient Email"
+                    />
+                    <textarea></textarea>
+                    <button> SUBMIT </button>
+                </div>
+            </main>
 
 
 
-    </div>
-  );
+        </div>
+    );
 }
