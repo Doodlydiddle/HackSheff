@@ -10,8 +10,6 @@ from geopy.geocoders import Nominatim
 import re
 import math
 
-from xarray.core.duck_array_ops import first
-
 
 # Test People:
 # Charles Dickens - Coords provided
