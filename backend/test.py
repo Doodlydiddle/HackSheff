@@ -65,12 +65,16 @@ def return_resting(page_name):
     # Get resting place
     resting_place = infobox.get('resting_place')
     restingplace = infobox.get('restingplace')
+    resting__place = infobox.get('resting place')
     resting_place_coordinates = infobox.get('resting_place_coordinates')
 
-    assert resting_place is not None or restingplace is not None, "There is no resting place listed in this wikipedia page"
+    assert resting_place is not None or restingplace is not None or resting__place is not None, "There is no resting place listed in this wikipedia page"
 
     if resting_place is None:
-        resting_place = restingplace
+        if resting__place is None:
+            resting_place = restingplace
+        else:
+            resting_place = resting__place
 
 
 
