@@ -146,15 +146,16 @@ def encrypt(plaintext, key):
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ciphertext = ""
     for i in range(len(plaintext)):
-        ciphertext += alphabet[(alphabet.index(plaintext[i]) + int(key[i%len(key)]) + int(key[i+1%len(key)])) % 26]
+        ciphertext += alphabet[(alphabet.index(plaintext[i]) + int(key[i%len(key) + key[i+1%len(key)])) % 26]
     return ciphertext
+
 
 def decrypt(ciphertext, key):
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     plaintext = ""
     for i in range(len(ciphertext)):
         plaintext += alphabet[
-            (alphabet.index(ciphertext[i]) - int(key[i % len(key)]) - int(key[i + 1 % len(key)])) % 26]
+            (alphabet.index(ciphertext[i]) - int(key[i % len(key)] + key[i + 1 % len(key)])) % 26]
     return plaintext
 
 __main__()
