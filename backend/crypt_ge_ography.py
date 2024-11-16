@@ -10,7 +10,8 @@ from geopy.geocoders import Nominatim
 import re
 import math
 import fastapi
-
+import sys
+sys.set_int_max_str_digits(10000)
 from xarray.core.duck_array_ops import first
 
 
@@ -24,6 +25,11 @@ from xarray.core.duck_array_ops import first
 #   ciphertext to be decryptable, we can't pick a random location in sea. An arbitrary point could be chosen, but At Sea
 #   is VERY FUNNY
 # Hachikō - Coords not provided. What a good pupper :)
+# Ada Lovelace - Coords not provided, works
+# Henry VIII - Coords not provided, works
+# Hannibal Hamlin - Coords not provided, has brackets in the resting place but they are important,
+#   counterexample to the trivial solution to Oliver Cromwell of removing all brackets
+# Pablo Picasso - Coords provided, but in Lat-Lon instead of DMS
 
 
 def __main__():
@@ -53,12 +59,21 @@ def return_resting(page_name):
     # Get resting place
     resting_place = infobox.get('resting_place')
     restingplace = infobox.get('restingplace')
+    resting__place = infobox.get('resting place')
+    burial_place = infobox.get('burial_place')
     resting_place_coordinates = infobox.get('resting_place_coordinates')
 
-    assert resting_place is not None or restingplace is not None, "There is no resting place listed in this wikipedia page"
+    assert (resting_place is not None or restingplace is not None
+            or resting__place is not None or burial_place is not None), \
+        "There is no resting place listed in this wikipedia page"
 
     if resting_place is None:
-        resting_place = restingplace
+        if resting__place is None and burial_place is None:
+            resting_place = restingplace
+        elif restingplace is None and burial_place is None:
+            resting_place = resting__place
+        else:
+            resting_place = burial_place
 
 
 
@@ -83,12 +98,18 @@ def get_coords(resting_place, resting_place_coordinates):
                 coords_list[i] = 'a'
         while coords_list.count('a'):
             coords_list.remove('a')
-        # DMS to decimal
-        coords_list[0], coords_list[3] = float(coords_list[0]), float(coords_list[3])
-        coords_list[1], coords_list[4] = float(coords_list[1])/60, float(coords_list[4])/60
-        coords_list[2], coords_list[5] = float(coords_list[2])/3600, float(coords_list[5])/3600
 
-        coords = [sum(coords_list[0:3]) * north_or_south, sum(coords_list[3:]) * east_or_west]
+        # DMS to decimal
+        if len(coords_list) == 6:
+            coords_list[0], coords_list[3] = float(coords_list[0]), float(coords_list[3])
+            coords_list[1], coords_list[4] = float(coords_list[1])/60, float(coords_list[4])/60
+            coords_list[2], coords_list[5] = float(coords_list[2])/3600, float(coords_list[5])/3600
+
+            coords = [sum(coords_list[0:3]) * north_or_south, sum(coords_list[3:]) * east_or_west]
+        # Already decimal
+        else:
+            coords = [coords_list[0] * north_or_south, coords_list[1] * east_or_west]
+
         return coords
 
     # coords not provided
