@@ -35,12 +35,9 @@ def __main__():
 
     message = input("\nEnter a message:   ")
     plaintext = re.sub("[^a-zA-Z]+", "", message).upper()
-    print(plaintext)
 
     ciphertext = encrypt(plaintext, key)
-    print(ciphertext)
     new_plaintext = decrypt(ciphertext, key)
-    print(new_plaintext)
 
 
 def return_resting(page_name):
@@ -138,7 +135,6 @@ def calc_generator(number):
             total_1 += int(str_num_1[i])
             total_2 += int(str_num_2[i])
 
-    print(total_1, total_2)
     return total_1 * total_2
 
 
