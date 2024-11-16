@@ -9,7 +9,8 @@ import wptools
 from geopy.geocoders import Nominatim
 import re
 import math
-import fastapi
+from fastapi import FastAPI
+import uvicorn
 
 from xarray.core.duck_array_ops import first
 
@@ -24,11 +25,10 @@ from xarray.core.duck_array_ops import first
 #   ciphertext to be decryptable, we can't pick a random location in sea. An arbitrary point could be chosen, but At Sea
 #   is VERY FUNNY
 # Hachikō - Coords not provided. What a good pupper :)
+# Marie Curie - No resting place listed
 
 
-def __main__():
-    person = input("Enter a famous dead person: ")
-    message = input("\nEnter a message:   ")
+def run_enc(message, person):
     resting, resting_coords = return_resting(person)
     coords = get_coords(resting, resting_coords)
 
@@ -38,7 +38,19 @@ def __main__():
     plaintext = re.sub("[^a-zA-Z]+", "", message).upper()
 
     ciphertext = encrypt(plaintext, key)
-    new_plaintext = decrypt(ciphertext, key)
+    return ciphertext
+
+def run_dec(message, person):
+    resting, resting_coords = return_resting(person)
+    coords = get_coords(resting, resting_coords)
+
+    key = calc_generator(coords[0]) ** calc_generator(coords[1])
+    key = str(key)
+
+    ciphertext = re.sub("[^a-zA-Z]+", "", message).upper()
+
+    plaintext = decrypt(ciphertext, key)
+    return plaintext
 
 
 def return_resting(page_name):
@@ -136,6 +148,7 @@ def calc_generator(number):
             total_1 += int(str_num_1[i])
             total_2 += int(str_num_2[i])
 
+    print(total_1, total_2)
     return total_1 * total_2
 
 
@@ -155,4 +168,22 @@ def decrypt(ciphertext, key):
             (alphabet.index(ciphertext[i]) - int(key[i % len(key)] + key[i + 1 % len(key)])) % 26]
     return plaintext
 
-__main__()
+
+app = FastAPI()
+
+@app.get("/encrypt")
+async def enc(plaintext: str, dead: str):
+    cipher = run_enc(plaintext, dead)
+    return {"Cipher-return": cipher}
+
+@app.get("/decrypt")
+async def dec(ciphertext: str, dead: str):
+    plain = run_dec(ciphertext, dead)
+    return {"Plain-return": plain}
+
+@app.get("/coordinates")
+async def place(dead: str):
+    resting, resting_coords = return_resting(dead)
+    coords = get_coords(resting, resting_coords)
+    return {"Co-ords": str(coords[0]) +"|" + str(coords[1])}
+
