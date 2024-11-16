@@ -110,7 +110,6 @@ def get_coords(resting_place, resting_place_coordinates):
         else:
             coords = [coords_list[0] * north_or_south, coords_list[1] * east_or_west]
 
-
         return coords
 
     # coords not provided

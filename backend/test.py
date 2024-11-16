@@ -33,6 +33,10 @@ sys.set_int_max_str_digits(10000)
 # Abraham Lincoln - Coords not provided, works
 # Hannibal Hamlin - Coords not provided, has brackets in the resting place but they are important,
 #   counterexample to the trivial solution to Oliver Cromwell of removing all brackets
+# Pablo Picasso - Coords provided, but in Lat-Lon instead of DMS
+# Salvador Dali - Coords not provided, weird wording though and accent in title, still works
+# Joseph Stalin - Coords not provided, two different resting places messes with processing, results in
+#   placing the point in Since, Poland, but returns a valid key
 
 
 def run_enc(message, person):
@@ -120,7 +124,7 @@ def get_coords(resting_place, resting_place_coordinates):
         # Already decimal
         else:
             coords = [coords_list[0] * north_or_south, coords_list[1] * east_or_west]
-            
+
         return coords
 
     # coords not provided
