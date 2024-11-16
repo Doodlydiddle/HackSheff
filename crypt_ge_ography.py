@@ -28,13 +28,13 @@ from xarray.core.duck_array_ops import first
 
 def __main__():
     person = input("Enter a famous dead person: ")
+    message = input("\nEnter a message:   ")
     resting, resting_coords = return_resting(person)
     coords = get_coords(resting, resting_coords)
 
     key = calc_generator(coords[0]) ** calc_generator(coords[1])
     key = str(key)
 
-    message = input("\nEnter a message:   ")
     plaintext = re.sub("[^a-zA-Z]+", "", message).upper()
 
     ciphertext = encrypt(plaintext, key)
@@ -143,7 +143,7 @@ def encrypt(plaintext, key):
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ciphertext = ""
     for i in range(len(plaintext)):
-        ciphertext += alphabet[(alphabet.index(plaintext[i]) + int(key[i%len(key) + key[i+1%len(key)])) % 26]
+        ciphertext += alphabet[(alphabet.index(plaintext[i]) + int(key[i%len(key)] + key[i+1%len(key)])) % 26]
     return ciphertext
 
 
