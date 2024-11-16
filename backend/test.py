@@ -30,6 +30,9 @@ sys.set_int_max_str_digits(10000)
 # Marie Curie - No resting place listed
 # Ada Lovelace - Coords not provided, works
 # Henry VIII - Coords not provided, works
+# Abraham Lincoln - Coords not provided, works
+# Hannibal Hamlin - Coords not provided, has brackets in the resting place but they are important,
+#   counterexample to the trivial solution to Oliver Cromwell of removing all brackets
 
 
 def run_enc(message, person):

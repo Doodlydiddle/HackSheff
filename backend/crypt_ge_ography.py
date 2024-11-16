@@ -27,6 +27,8 @@ from xarray.core.duck_array_ops import first
 # Hachikō - Coords not provided. What a good pupper :)
 # Ada Lovelace - Coords not provided, works
 # Henry VIII - Coords not provided, works
+# Hannibal Hamlin - Coords not provided, has brackets in the resting place but they are important,
+#   counterexample to the trivial solution to Oliver Cromwell of removing all brackets
 
 
 def __main__():
@@ -52,7 +54,6 @@ def return_resting(page_name):
 
     page_box = wptools.page(page_name).get_parse()
     infobox = page_box.data['infobox']
-    print(infobox)
 
     # Get resting place
     resting_place = infobox.get('resting_place')
