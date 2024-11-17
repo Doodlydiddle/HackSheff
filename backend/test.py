@@ -43,7 +43,8 @@ sys.set_int_max_str_digits(10000)
 # Richard III of Engalnd - Coords not provided, two burial locations formatted badly,
 #   works after a significant delay
 # Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
-#   works after a significant delay,
+#   works after a significant delay
+# Steve Irwin - Coords not provided, works great
 
 
 def run_enc(message, person):
