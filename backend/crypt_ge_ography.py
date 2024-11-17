@@ -27,10 +27,14 @@ from xarray.core.duck_array_ops import first
 # Hachikō - Coords not provided. What a good pupper :)
 # Ada Lovelace - Coords not provided, works
 # Henry VIII - Coords not provided, works
-# Hannibal Hamlin - Coords not provided, has brackets in the resting place but they are important,
+# Hannibal Hamlin - Coords not provided, has brackets in the resting place, but they are important,
 #   counterexample to the trivial solution to Oliver Cromwell of removing all brackets
 # Pablo Picasso - Coords provided, but in Lat-Lon instead of DMS
-
+# Roald Dahl - Coords not provided, needed to prevent time-outs to get it to work
+# Richard III of Engalnd - Coords not provided, two burial locations formatted badly,
+#   works after a significant delay
+# Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
+#   works after a significant delay,
 
 def __main__():
     person = input("Enter a famous dead person: ")
@@ -40,11 +44,22 @@ def __main__():
 
     key = calc_generator(coords[0]) ** calc_generator(coords[1])
     key = str(key)
+    print(key)
 
     plaintext = re.sub("[^a-zA-Z]+", "", message).upper()
 
+    print("\n\n")
     ciphertext = encrypt(plaintext, key)
+    print(ciphertext)
+
+    person = input("\nEnter a famous dead person: ")
+    resting, resting_coords = return_resting(person)
+    coords = get_coords(resting, resting_coords)
+
+    key = calc_generator(coords[0]) ** calc_generator(coords[1])
+    key = str(key)
     new_plaintext = decrypt(ciphertext, key)
+    print(new_plaintext)
 
 
 def return_resting(page_name):
@@ -110,6 +125,7 @@ def get_coords(resting_place, resting_place_coordinates):
         else:
             coords = [coords_list[0] * north_or_south, coords_list[1] * east_or_west]
 
+        print(coords)
         return coords
 
     # coords not provided
@@ -123,14 +139,15 @@ def get_coords(resting_place, resting_place_coordinates):
     resting_place = [re.sub("[^A-Za-z0-9 ]+", '', element) for element in resting_place]
 
     resting_place = ", ".join(resting_place)
-
+    print(resting_place)
     location_variable = None
     while location_variable is None:
-        location_variable = geolocator.geocode(resting_place, limit=10, exactly_one=False)
+        location_variable = geolocator.geocode(resting_place, limit=10, exactly_one=False, timeout=None)
 
         if location_variable is None:
             resting_place = re.sub(r'^.*?,', '', resting_place)
             resting_place = resting_place[1:]
+            print(resting_place)
 
         assert len(resting_place) != 0, "Could not geocode resting place"
 
@@ -157,6 +174,7 @@ def calc_generator(number):
             total_1 += int(str_num_1[i])
             total_2 += int(str_num_2[i])
 
+    print(total_1, total_2)
     return total_1 * total_2
 
 

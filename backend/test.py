@@ -39,6 +39,11 @@ sys.set_int_max_str_digits(10000)
 # Salvador Dali - Coords not provided, weird wording though and accent in title, still works
 # Joseph Stalin - Coords not provided, two different resting places messes with processing, results in
 #   placing the point in Since, Poland, but returns a valid key
+# Roald Dahl - Coords not provided, needed to prevent time-outs to get it to work
+# Richard III of Engalnd - Coords not provided, two burial locations formatted badly,
+#   works after a significant delay
+# Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
+#   works after a significant delay,
 
 
 def run_enc(message, person):
@@ -143,7 +148,7 @@ def get_coords(resting_place, resting_place_coordinates):
 
     location_variable = None
     while location_variable is None:
-        location_variable = geolocator.geocode(resting_place, limit=10, exactly_one=False)
+        location_variable = geolocator.geocode(resting_place, limit=10, exactly_one=False, timeout=None)
 
         if location_variable is None:
             resting_place = re.sub(r'^.*?,', '', resting_place)
@@ -174,7 +179,6 @@ def calc_generator(number):
             total_1 += int(str_num_1[i])
             total_2 += int(str_num_2[i])
 
-    print(total_1, total_2)
     return total_1 * total_2
 
 
