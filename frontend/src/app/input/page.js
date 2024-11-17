@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Cookie from "js-cookie";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
     const [formData, setFormData] = useState({
@@ -17,6 +19,12 @@ export default function Home() {
         }));
     };
 
+    const router = useRouter();
+
+    if (!Cookie.get("username")) {
+        router.push("/login");
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const response = await fetch("http://127.0.0.1:9000/encrypt", {
@@ -29,9 +37,22 @@ export default function Home() {
                 "Content-Type": "application/json"
             }
         })
-            .then(response => response.json())  // Parse JSON
-            .then(data => console.log(data));   // Log response data
-    };
+        const ciphertext = (await response.json())["Cipher-return"];
+        console.log(ciphertext);
+
+        await fetch("http://127.0.0.1:9000/send", {
+            method: "POST",
+            body: JSON.stringify({
+                username: formData.email,
+                message: ciphertext
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        router.push("/");
+    }
 
     return (
         <div

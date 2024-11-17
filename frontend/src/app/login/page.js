@@ -1,8 +1,12 @@
 "use client"
 
 import {useState} from "react";
+import {UsernameProvider} from "@/app/context/UsernameContext";
+import Cookie from "js-cookie"
+import {useRouter} from "next/navigation";
 
 export default function Form() {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: "",
     });
@@ -24,19 +28,30 @@ export default function Form() {
                 "Content-Type": "application/json",
             }
         })
+        Cookie.set("username", formData.username)
+        router.push("/")
     }
 
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center" style={{ fontFamily: "'Courier New', monospace" }}>
-            <form onSubmit={handleSubmit}>
-                <div className="flex flex-col items-center">
-                    <label htmlFor="username">Username</label>
-                    <input id="username" type="text" name="username" value={formData.username} onChange={handleChange} required className="text-black"/>
-                </div>
-                <div className="flex flex-col items-center">
-                    <button type="submit">Login</button>
-                </div>
-            </form>
-        </div>
+        <UsernameProvider>
+            <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center"
+                 style={{fontFamily: "'Courier New', monospace"}}>
+                <form onSubmit={handleSubmit}>
+                    <div className="flex flex-col items-center">
+                        <label htmlFor="username">Username</label>
+                        <input id="username"
+                               type="text"
+                               name="username"
+                               value={formData.username}
+                               onChange={handleChange}
+                               required
+                               className="text-black"/>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <button type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        </UsernameProvider>
     );
 }

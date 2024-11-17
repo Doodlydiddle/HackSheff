@@ -1,5 +1,6 @@
 # Crypt(ge)ography
 # Taking Secrets to the Grave
+import random
 
 import wikipediaapi as wiki
 from OSMPythonTools.api import Api as osm
@@ -17,8 +18,8 @@ import sys
 
 from xarray.core.duck_array_ops import first
 
-
 sys.set_int_max_str_digits(10000)
+
 # Test People:
 # Charles Dickens - Coords provided
 # George Washington - Coords provided
@@ -45,6 +46,9 @@ sys.set_int_max_str_digits(10000)
 # Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
 #   works after a significant delay
 # Steve Irwin - Coords not provided, works great
+# Charlie Chaplin - Coords not provided, hyphenated name but still works
+# Christopher Levett - Coords not provided, buried at sea, does match Obadiah Bush (meaning the
+#   keys are the same, which they should be - they have the same generator)
 
 
 def run_enc(message, person):
@@ -221,13 +225,23 @@ async def enc(request: EncryptRequest):
     cipher = run_enc(plaintext, dead)
     return {"Cipher-return": cipher}
 
+class DecryptRequest(BaseModel):
+    ciphertext: str
+    dead: str
+
 @app.post("/decrypt")
-async def dec(ciphertext: str, dead: str):
+async def dec(request: DecryptRequest):
+    ciphertext = request.ciphertext
+    dead = request.dead
     plain = run_dec(ciphertext, dead)
-    return {"Plain-return": plain}
+    return {"Plain-return": plain, "Wiki-page": 'https://en.wikipedia.org/wiki/'+dead.replace(" ", "_")}
+
+class CoordRequest(BaseModel):
+    dead: str
 
 @app.post("/coordinates")
-async def place(dead: str):
+async def place(request: CoordRequest):
+    dead = CoordRequest.dead
     resting, resting_coords = return_resting(dead)
     coords = get_coords(resting, resting_coords)
     return {"Co-ords": str(coords[0]) +"|" + str(coords[1])}
@@ -251,4 +265,30 @@ class SendRequest(BaseModel):
 async def send(request: SendRequest):
     username = request.username
     message = request.message
+    print(message)
+    if username not in users:
+        users[username] = []
     users[username].append(message)
+
+class InboxRequest(BaseModel):
+    username: str
+
+@app.post("/inbox")
+async def inbox(request: InboxRequest):
+    username = request.username
+    if username not in users:
+        users[username] = ["message"]
+    if len(users[username]) == 0:
+        return {"message": ""}
+    message = users[username].pop(0)
+    return {"message": message}
+
+hover_people = ["Ada Lovelace", "Charlie Chaplin", "George Washington", "Winston Churchill", "Charles Dickens",
+                "Pablo Picasso", "Hachikō", "Henry VIII", "Abraham Lincoln"]
+
+@app.post("/hover")
+async def hover_enc():
+    title = "CRYPTGEOGRAPHY"
+    cipher = run_enc(title, random.choice(hover_people))
+    cipher = cipher[:5] + "(" + cipher[6:8] + ")" + cipher[9:]
+    return {"Cipher-return": cipher}

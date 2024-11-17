@@ -34,7 +34,7 @@ from xarray.core.duck_array_ops import first
 # Richard III of Engalnd - Coords not provided, two burial locations formatted badly,
 #   works after a significant delay
 # Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
-#   works after a significant delay,
+#   works after a significant delay
 
 def __main__():
     person = input("Enter a famous dead person: ")
@@ -125,7 +125,6 @@ def get_coords(resting_place, resting_place_coordinates):
         else:
             coords = [coords_list[0] * north_or_south, coords_list[1] * east_or_west]
 
-        print(coords)
         return coords
 
     # coords not provided
@@ -139,7 +138,6 @@ def get_coords(resting_place, resting_place_coordinates):
     resting_place = [re.sub("[^A-Za-z0-9 ]+", '', element) for element in resting_place]
 
     resting_place = ", ".join(resting_place)
-    print(resting_place)
     location_variable = None
     while location_variable is None:
         location_variable = geolocator.geocode(resting_place, limit=10, exactly_one=False, timeout=None)
@@ -147,7 +145,6 @@ def get_coords(resting_place, resting_place_coordinates):
         if location_variable is None:
             resting_place = re.sub(r'^.*?,', '', resting_place)
             resting_place = resting_place[1:]
-            print(resting_place)
 
         assert len(resting_place) != 0, "Could not geocode resting place"
 
@@ -174,7 +171,6 @@ def calc_generator(number):
             total_1 += int(str_num_1[i])
             total_2 += int(str_num_2[i])
 
-    print(total_1, total_2)
     return total_1 * total_2
 
 
