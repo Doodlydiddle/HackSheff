@@ -9,12 +9,12 @@ export default function Output() {
 
     // Redirect to login page if no username exists
     if (!Cookie.get("username")) {
-        // router.push("/login");
+        router.push("/login");
     }
 
     // Redirect to home page if no ciphertext exists
     if (!Cookie.get("ciphertext")) {
-        // router.push("/")
+        router.push("/")
     }
 
     const ciphertext = Cookie.get("ciphertext");
@@ -82,7 +82,7 @@ export default function Output() {
 
                         {/* Decrypt Button with transparent background and green border on hover */}
                         <button
-                            className="text-white bg-transparent border border-white py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 mb-4"
+                            className="text-white font-bold bg-transparent border border-white py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 mb-4"
                             onClick={onDecrypt}
                         >
                             Decrypt
