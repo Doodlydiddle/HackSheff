@@ -1,24 +1,26 @@
 "use client";
 
-import {UsernameProvider} from "@/app/context/UsernameContext";
+import { UsernameProvider } from "@/app/context/UsernameContext";
 import Cookie from "js-cookie";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Output() {
     const router = useRouter();
 
+    // Redirect to login page if no username exists
     if (!Cookie.get("username")) {
-        router.push("/login");
+        // router.push("/login");
     }
 
+    // Redirect to home page if no ciphertext exists
     if (!Cookie.get("ciphertext")) {
-        router.push("/")
+        // router.push("/")
     }
 
     const ciphertext = Cookie.get("ciphertext");
 
     async function onDecrypt() {
-        const response = await fetch("http://127.0.0.1:9000/decrypt", {
+        const response = await fetch("http://127.0.1:9000/decrypt", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -36,48 +38,66 @@ export default function Output() {
 
     return (
         <UsernameProvider>
-            <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center"
-                 style={{fontFamily: "'Courier New', monospace"}}>
-                <header className="mb-10">
-                    <h1 className="text-4xl font-bold text-center hover:text-green-500 duration-300">
-                        CRYPT(GE)OGRAPHY
-                    </h1>
+            <div className="min-h-screen bg-cover bg-center text-white flex flex-col items-center justify-center"
+                 style={{
+                     fontFamily: "'Courier New', monospace",
+                     backgroundImage: "url('/Vector.svg')",  // Add background image
+                     backgroundSize: "cover",
+                     backgroundPosition: "center",
+                     backgroundRepeat: "no-repeat",
+                     cursor: "url('/Cursor.svg'), auto",  // Custom cursor
+                 }}>
+                <header className="w-full flex justify-start px-4 mb-10">
+                    {/* Home Button */}
+                    <button
+                        onClick={() => router.push("/")}
+                        className="text-white bg-transparent border border-white py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition duration-300"
+                    >
+                        Home
+                    </button>
                 </header>
 
-                <button
-                    onClick={() => router.push("/")}  // Redirect to home page
-                    className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200"
-                >
-                    Home
-                </button>
+                <main className="flex flex-col items-center justify-center gap-6 w-full max-w-4xl">
+                    <h1 className="text-4xl font-bold text-center mb-8 hover:text-green-500 transition duration-300">
+                        CRYPT(GE)OGRAPHY
+                    </h1>
 
-                <main className="flex flex-col items-center justify-center">
                     <section className="flex flex-col items-center justify-center mb-8 w-full max-w-4xl">
-                        <h2 className="text-lg font-bold mb-4 text-center">Message:</h2>
-                        <div className="bg-white text-black p-8 rounded-lg max-w-xl w-full flex justify-center items-center hover:border-4 hover:border-green-500">
-                            <p id="message" className="text-sm text-center">
+                        <h2 className="text-lg font-bold mb-4 text-center">Encrypted Message:</h2>
+                        {/* Larger Box with black background, 0.8 opacity, and white border */}
+                        <div className="bg-black bg-opacity-80 text-white p-8 w-96 flex justify-center items-center rounded-lg border-2 border-white hover:border-green-500 transition duration-300">
+                            <p id="message" className="text-base text-center">
                                 {ciphertext}
                             </p>
                         </div>
-                        <label htmlFor="dead">Famous Dead Person</label>
-                        <input id="dead"
-                               name="dead"
-                               type="text"
-                               className="w-80 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"/>
-                        <button className="px-6 py-2 bg-white text-black font-bold hover:bg-green-500 hover:text-white transition duration-200 mb-4"
-                                onClick={onDecrypt}>Decrypt
+
+                        {/* Updated label */}
+                        <label htmlFor="dead" className="mt-4 mb-2 text-lg font-bold">Famous Dead Person:</label>
+                        <input
+                            id="dead"
+                            name="dead"
+                            type="text"
+                            className="w-80 p-2 border border-gray-300 bg-black bg-opacity-80 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+                        />
+
+                        {/* Decrypt Button with transparent background and green border on hover */}
+                        <button
+                            className="text-white bg-transparent border border-white py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition duration-300 mb-4"
+                            onClick={onDecrypt}
+                        >
+                            Decrypt
                         </button>
                     </section>
 
                     <section className="mt-8">
-
-                        <h2 className="text-lg font-bold mb-2">Wikipedia Page:</h2>
-                        <iframe id="wikipage"
-                                src="https://en.wikipedia.org/wiki/Cryptography"
-                                width="600"
-                                height="450"
-                                style={{border: 0}}
-                                className="rounded-lg"
+                        <h2 className="text-lg font-bold mb-4">Wikipedia Page:</h2>
+                        <iframe
+                            id="wikipage"
+                            src="https://en.wikipedia.org/wiki/Cryptography"
+                            width="600"
+                            height="450"
+                            style={{ border: 0 }}
+                            className="rounded-lg"
                         ></iframe>
                     </section>
                 </main>
