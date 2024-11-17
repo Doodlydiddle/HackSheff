@@ -85,7 +85,6 @@ export default function Home() {
                     <input
                         id="email"
                         name="email"
-                        type="email"
                         className="w-full p-3 border border-gray-500 rounded-lg bg-black/80 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
                         onChange={handleChange}
                         required
