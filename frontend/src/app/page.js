@@ -1,4 +1,5 @@
 "use client";
+"use client";
 
 import { useState } from "react";
 
@@ -36,7 +37,6 @@ export default function Home() {
         }
     };
 
-    // Function to close the popup when the user clicks the X
     const closePopup = () => {
         setIsPopupVisible(false);
     }
@@ -47,14 +47,28 @@ export default function Home() {
 
     return (
         <UsernameProvider>
-            <div className="min-h-screen bg-custom-maze bg-cover bg-center text-white flex flex-col items-center justify-center"
-                 style={{fontFamily: "'Courier New', monospace"}}>
-                <header className="mb-10">
-                    <h1 className="text-4xl font-bold text-center hover:text-green-500 duration-300">
-                        CRYPT(GE)OGRAPHY
-                    </h1>
-                </header>
+        <div className="min-h-screen bg-custom-maze bg-cover bg-center text-white flex flex-col items-center justify-center"
+        style={{
+            fontFamily: "'Courier New', monospace",
+            backgroundImage: "url('/Vector.svg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            cursor: "url('/Cursor.svg'), auto", // Custom cursor applied here
+        }}>
 
+            <header className="mb-12">
+                <h1 className="text-5xl font-bold text-center hover:text-green-500 transition duration-300">
+                    CRYPT(GE)OGRAPHY
+                </h1>
+            </header>
+
+            <main className="flex flex-col items-center justify-center gap-6">
+                <Link href="/input">
+                    <button className="w-full max-w-md py-4 bg-white text-black font-bold text-xl rounded-lg hover:bg-green-500 hover:text-white transition duration-200">
+                        Send a Message
+                    </button>
+                </Link>
                 <main className="flex flex-col items-center justify-center">
                     <Link href="/input">
                         <button className="px-6 py-2 bg-white text-black font-bold hover:bg-green-500 hover:text-white transition duration-200 mb-4">
@@ -62,28 +76,29 @@ export default function Home() {
                         </button>
                     </Link>
 
-                    <button
-                        onClick={handleViewInbox}
-                        className="px-6 py-2 bg-white text-black font-bold hover:bg-green-500 hover:text-white transition duration-200 mb-4"
-                    >
-                        View Inbox
-                    </button>
-                </main>
-                {/* Popup for no messages */}
-                {isPopupVisible && (
-                    <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white p-4 rounded-md shadow-lg z-50">
-                        <div className="flex justify-between items-center">
-                            <span>No messages in the inbox</span>
-                            <button
-                                onClick={closePopup}
-                                className="text-xl font-bold text-red-500 hover:text-red-700"
-                            >
-                                &times; {/* The "X" symbol to close */}
-                            </button>
-                        </div>
+                <button
+                    onClick={handleViewInbox}
+                    className="px-6 py-2 bg-white text-black font-bold hover:bg-green-500 hover:text-white transition duration-200 mb-4"
+                >
+                    View Inbox
+                </button>
+            </main>
+
+            {/* Popup for no messages */}
+            {isPopupVisible && (
+                <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white p-4 rounded-md shadow-lg z-50">
+                    <div className="flex justify-between items-center">
+                        <span>No messages in the inbox</span>
+                        <button
+                            onClick={closePopup}
+                            className="text-xl font-bold text-red-500 hover:text-red-700"
+                        >
+                            &times; {/* The "X" symbol to close */}
+                        </button>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+        </div>
         </UsernameProvider>
     );
 }
