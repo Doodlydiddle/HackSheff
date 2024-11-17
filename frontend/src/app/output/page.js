@@ -1,6 +1,6 @@
 "use client";
 
-import { UsernameProvider } from "@/app/context/UsernameContext";
+import {UsernameProvider} from "@/app/context/UsernameContext";
 import Cookie from "js-cookie";
 import {useRouter} from "next/navigation";
 
@@ -29,9 +29,9 @@ export default function Output() {
             }),
         })
 
-        const data = (await response.json())["Plain-return"];
-        console.log(data)
-        document.getElementById("message").innerText = data;
+        const data = await response.json();
+        document.getElementById("message").innerText = data["Plain-return"];
+        document.getElementById("wikipage").src = data["Wiki-page"];
     }
 
     return (
@@ -70,13 +70,14 @@ export default function Output() {
                     </section>
 
                     <section className="mt-8">
+
                         <h2 className="text-lg font-bold mb-2">Wikipedia Page:</h2>
-                        <iframe
-                            src="https://en.wikipedia.org/wiki/Cryptography"
-                            width="600"
-                            height="450"
-                            style={{border: 0}}
-                            className="rounded-lg"
+                        <iframe id="wikipage"
+                                src="https://en.wikipedia.org/wiki/Cryptography"
+                                width="600"
+                                height="450"
+                                style={{border: 0}}
+                                className="rounded-lg"
                         ></iframe>
                     </section>
                 </main>
