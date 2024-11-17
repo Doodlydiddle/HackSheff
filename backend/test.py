@@ -254,7 +254,8 @@ class ConnectRequest(BaseModel):
 @app.post("/connect")
 async def connect(request: ConnectRequest):
     username = request.username
-    users[username] = []
+    if username not in users:
+        users[username] = []
     print(f"{username} connected")
 
 class SendRequest(BaseModel):
