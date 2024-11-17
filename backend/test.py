@@ -17,8 +17,8 @@ import sys
 
 from xarray.core.duck_array_ops import first
 
-
 sys.set_int_max_str_digits(10000)
+
 # Test People:
 # Charles Dickens - Coords provided
 # George Washington - Coords provided
@@ -45,6 +45,9 @@ sys.set_int_max_str_digits(10000)
 # Mary, Queen of Scots - Coords not provided, two burial locations formatted badly,
 #   works after a significant delay
 # Steve Irwin - Coords not provided, works great
+# Charlie Chaplin - Coords not provided, hyphenated name but still works
+# Christopher Levett - Coords not provided, buried at sea, does match Obadiah Bush (meaning the
+#   keys are the same, which they should be - they have the same generator)
 
 
 def run_enc(message, person):
