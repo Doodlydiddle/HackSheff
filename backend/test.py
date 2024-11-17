@@ -276,8 +276,12 @@ class InboxRequest(BaseModel):
 @app.post("/inbox")
 async def inbox(request: InboxRequest):
     username = request.username
+    if username not in users:
+        users[username] = ["message"]
+    if len(users[username]) == 0:
+        return {"message": ""}
     message = users[username].pop(0)
-    return message
+    return {"message": message}
 
 hover_people = ["Ada Lovelace", "Charlie Chaplin", "George Washington", "Winston Churchill", "Charles Dickens",
                 "Pablo Picasso", "Hachikō", "Henry VIII", "Abraham Lincoln"]
