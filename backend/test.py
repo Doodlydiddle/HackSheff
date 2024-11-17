@@ -233,7 +233,7 @@ async def dec(request: DecryptRequest):
     ciphertext = request.ciphertext
     dead = request.dead
     plain = run_dec(ciphertext, dead)
-    return {"Plain-return": plain}
+    return {"Plain-return": plain, "Wiki-page": 'https://en.wikipedia.org/wiki/'+dead.replace(" ", "_")}
 
 class CoordRequest(BaseModel):
     dead: str
