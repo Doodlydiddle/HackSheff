@@ -10,6 +10,8 @@ from geopy.geocoders import Nominatim
 import re
 import math
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import uvicorn
 import sys
 
@@ -195,6 +197,17 @@ def decrypt(ciphertext, key):
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
+
+class ConnectRequest(BaseModel):
+    username: str
+
 @app.get("/encrypt")
 async def enc(plaintext: str, dead: str):
     cipher = run_enc(plaintext, dead)
@@ -215,8 +228,10 @@ users = {}
 
 
 @app.post("/connect")
-async def connect(username: str):
+async def connect(request: ConnectRequest):
+    username = request.username
     users[username] = []
+    print(f"{username} connected")
 
 @app.post("/send/{username}")
 async def send(username: str, message: str):
