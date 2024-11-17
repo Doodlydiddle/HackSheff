@@ -11,6 +11,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        'custom-maze': "url('/Vector.svg')", // Path to your SVG file in the public folder
+      },
     },
   },
   plugins: [],
