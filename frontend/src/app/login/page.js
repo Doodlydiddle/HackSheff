@@ -2,8 +2,11 @@
 
 import {useState} from "react";
 import {UsernameProvider} from "@/app/context/UsernameContext";
+import Cookie from "js-cookie"
+import {useRouter} from "next/navigation";
 
 export default function Form() {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: "",
     });
@@ -25,6 +28,8 @@ export default function Form() {
                 "Content-Type": "application/json",
             }
         })
+        Cookie.set("username", formData.username)
+        router.push("/")
     }
 
     return (
