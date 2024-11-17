@@ -1,5 +1,6 @@
 # Crypt(ge)ography
 # Taking Secrets to the Grave
+import random
 
 import wikipediaapi as wiki
 from OSMPythonTools.api import Api as osm
@@ -277,3 +278,13 @@ async def inbox(request: InboxRequest):
     username = request.username
     message = users[username].pop(0)
     return message
+
+hover_people = ["Ada Lovelace", "Charlie Chaplin", "George Washington", "Winston Churchill", "Charles Dickens",
+                "Pablo Picasso", "Hachikō", "Henry VIII", "Abraham Lincoln"]
+
+@app.post("/hover")
+async def hover_enc():
+    title = "CRYPTGEOGRAPHY"
+    cipher = run_enc(title, random.choice(hover_people))
+    cipher = cipher[:5] + "(" + cipher[6:8] + ")" + cipher[9:]
+    return {"Cipher-return": cipher}
