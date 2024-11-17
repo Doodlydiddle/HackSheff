@@ -29,8 +29,19 @@ export default function Home() {
                 "Content-Type": "application/json"
             }
         })
-            .then(response => response.json())  // Make sure to parse the JSON
-            .then(data => console.log(data));   // Log the response data
+        const ciphertext = (await response.json())["Cipher-return"];
+        console.log(ciphertext);
+
+        const response2 = await fetch("http://127.0.0.1:9000/send", {
+            method: "POST",
+            body: JSON.stringify({
+                username: formData.email,
+                message: ciphertext
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
     }
 
     return (

@@ -251,4 +251,7 @@ class SendRequest(BaseModel):
 async def send(request: SendRequest):
     username = request.username
     message = request.message
+    print(message)
+    if username not in users:
+        users[username] = []
     users[username].append(message)
