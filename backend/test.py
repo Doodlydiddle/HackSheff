@@ -241,7 +241,7 @@ class CoordRequest(BaseModel):
 
 @app.post("/coordinates")
 async def place(request: CoordRequest):
-    dead = CoordRequest.dead
+    dead = request.dead
     resting, resting_coords = return_resting(dead)
     coords = get_coords(resting, resting_coords)
     return {"Co-ords": str(coords[0]) +"|" + str(coords[1])}

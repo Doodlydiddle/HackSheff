@@ -1,8 +1,8 @@
 "use client";
 
-import { UsernameProvider } from "@/app/context/UsernameContext";
+import {UsernameProvider} from "@/app/context/UsernameContext";
 import Cookie from "js-cookie";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 export default function Output() {
     const router = useRouter();
@@ -34,6 +34,18 @@ export default function Output() {
         const data = await response.json();
         document.getElementById("message").innerText = data["Plain-return"];
         document.getElementById("wikipage").src = data["Wiki-page"];
+
+        const response2 = await fetch("http://127.0.0.1:9000/coordinates", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                dead: document.getElementById("dead").value
+            })
+        })
+
+        document.getElementById("coords").innerText = (await response2.json())["Co-ords"];
     }
 
     return (
@@ -87,6 +99,11 @@ export default function Output() {
                         >
                             Decrypt
                         </button>
+
+                        <p
+                            id="coords"
+                            className="w-80 h-16 p-2 border border-gray-300 bg-black bg-opacity-80 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+                        ></p>
                     </section>
 
                     <section className="mt-8">
