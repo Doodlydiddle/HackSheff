@@ -224,13 +224,23 @@ async def enc(request: EncryptRequest):
     cipher = run_enc(plaintext, dead)
     return {"Cipher-return": cipher}
 
+class DecryptRequest(BaseModel):
+    ciphertext: str
+    dead: str
+
 @app.post("/decrypt")
-async def dec(ciphertext: str, dead: str):
+async def dec(request: DecryptRequest):
+    ciphertext = request.ciphertext
+    dead = request.dead
     plain = run_dec(ciphertext, dead)
     return {"Plain-return": plain}
 
+class CoordRequest(BaseModel):
+    dead: str
+
 @app.post("/coordinates")
-async def place(dead: str):
+async def place(request: CoordRequest):
+    dead = CoordRequest.dead
     resting, resting_coords = return_resting(dead)
     coords = get_coords(resting, resting_coords)
     return {"Co-ords": str(coords[0]) +"|" + str(coords[1])}
@@ -255,3 +265,12 @@ async def send(request: SendRequest):
     username = request.username
     message = request.message
     users[username].append(message)
+
+class InboxRequest(BaseModel):
+    username: str
+
+@app.post("/inbox")
+async def inbox(request: InboxRequest):
+    username = request.username
+    message = users[username].pop(0)
+    return message
