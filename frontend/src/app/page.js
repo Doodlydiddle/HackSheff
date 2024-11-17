@@ -14,10 +14,25 @@ export default function Home() {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     // Function to handle the "View Inbox" button click
-    const handleViewInbox = () => {
-        // Show the popup only if there are no messages
-        if (inbox.length === 0) {
+    const handleViewInbox = async () => {
+        const response = await fetch("http://127.0.0.1:9000/inbox", {
+            method: "POST",
+            body: JSON.stringify({
+                username: Cookie.get("username")
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const message = (await response.json()).message;
+
+        if (message === "") {
             setIsPopupVisible(true);
+        } else {
+            setIsPopupVisible(false);
+            Cookie.set("ciphertext", message);
+            router.push("/output")
         }
     };
 
