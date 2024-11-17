@@ -277,7 +277,7 @@ class InboxRequest(BaseModel):
 async def inbox(request: InboxRequest):
     username = request.username
     if username not in users:
-        users[username] = ["message"]
+        users[username] = []
     if len(users[username]) == 0:
         return {"message": ""}
     message = users[username].pop(0)
