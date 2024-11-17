@@ -1,6 +1,38 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react";
 
 export default function Home() {
+    const [formData, setFormData] = useState({
+        email: "",
+        famousPerson: "",
+        message: ""
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const response = await fetch("http://127.0.0.1:9000/encrypt", {
+            method: "POST",
+            body: JSON.stringify({
+                plaintext: formData.message,
+                dead: formData.famousPerson,
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())  // Make sure to parse the JSON
+            .then(data => console.log(data));   // Log the response data
+    }
+
     return (
         <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center" style={{ fontFamily: "'Courier New', monospace" }}>
             <header className="mb-10">
@@ -9,15 +41,18 @@ export default function Home() {
                 </h1>
             </header>
 
-            <main>
+            <form onSubmit={handleSubmit}>
                 <div className="flex flex-col items-center gap-4">
                     <label htmlFor="email" className="text-sm">
                         Recipient Email:
                     </label>
                     <input
-                        type="email"
                         id="email"
+                        name="email"  // Add name attribute here
                         className="w-80 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={handleChange}
+                        required
+                        value={formData.email}
                     />
                 </div>
 
@@ -28,7 +63,11 @@ export default function Home() {
                     <input
                         type="text"
                         id="famousPerson"
+                        name="famousPerson"  // Add name attribute here
                         className="w-80 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={handleChange}
+                        required
+                        value={formData.famousPerson}
                     />
                 </div>
                 <div className="flex flex-col items-center">
@@ -37,7 +76,11 @@ export default function Home() {
                     </label>
                     <textarea
                         id="message"
+                        name="message"  // Add name attribute here
                         className="w-80 h-32 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={handleChange}
+                        required
+                        value={formData.message}
                     ></textarea>
                 </div>
 
@@ -49,7 +92,7 @@ export default function Home() {
                         Send
                     </button>
                 </div>
-            </main>
+            </form>
         </div>
     );
 }

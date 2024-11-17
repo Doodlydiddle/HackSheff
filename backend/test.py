@@ -205,20 +205,23 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-class ConnectRequest(BaseModel):
-    username: str
+class EncryptRequest(BaseModel):
+    plaintext: str
+    dead: str
 
-@app.get("/encrypt")
-async def enc(plaintext: str, dead: str):
+@app.post("/encrypt")
+async def enc(request: EncryptRequest):
+    plaintext = request.plaintext
+    dead = request.dead
     cipher = run_enc(plaintext, dead)
     return {"Cipher-return": cipher}
 
-@app.get("/decrypt")
+@app.post("/decrypt")
 async def dec(ciphertext: str, dead: str):
     plain = run_dec(ciphertext, dead)
     return {"Plain-return": plain}
 
-@app.get("/coordinates")
+@app.post("/coordinates")
 async def place(dead: str):
     resting, resting_coords = return_resting(dead)
     coords = get_coords(resting, resting_coords)
@@ -226,6 +229,8 @@ async def place(dead: str):
 
 users = {}
 
+class ConnectRequest(BaseModel):
+    username: str
 
 @app.post("/connect")
 async def connect(request: ConnectRequest):
@@ -233,6 +238,12 @@ async def connect(request: ConnectRequest):
     users[username] = []
     print(f"{username} connected")
 
-@app.post("/send/{username}")
-async def send(username: str, message: str):
+class SendRequest(BaseModel):
+    username: str
+    message: str
+
+@app.post("/send")
+async def send(request: SendRequest):
+    username = request.username
+    message = request.message
     users[username].append(message)
